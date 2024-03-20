@@ -9,4 +9,5 @@ Prerequisites
 - Patrol CLI should be installed
 
 Running test
-- patrol test -t integration__test.dart
+- start emulator
+- Run this command: 'patrol test -t integration_test/main_test.dart'

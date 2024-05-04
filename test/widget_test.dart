@@ -1,10 +1,3 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,19 +5,34 @@ import 'package:note_taking_app/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+      // Build app and trigger a frame.
+      await tester.pumpWidget(NoteApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      // Verify if the AppBar title is correct.
+      expect(find.text('Note Taking App'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      // Verify no note displayed
+      expect(find.byType(ListTile), findsNothing);
+      
+      // Populate TextFormField
+      await tester.enterText(find.byType(TextField), 'My first note');
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // Tap on Add button
+      await tester.tap(find.byIcon(Icons.add));
+
+      // Rebuild widget after state changes
+      await tester.pumpAndSettle();
+
+      // Verify listing of notes, the entered note is displayed
+      expect(find.text('My first note'), findsOneWidget);
+
+      // Tap on Delete button to delete the note
+      await tester.tap(find.byIcon(Icons.delete));
+
+      // Rebuild widget after state changes
+      await tester.pumpAndSettle();
+
+      // Verify deletion of notes, no note should be displayed
+      expect(find.text('My first note'), findsNothing);
   });
 }
